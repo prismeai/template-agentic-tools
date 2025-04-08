@@ -1,0 +1,84 @@
+slug: Web-browsing
+name: AIK/Tools/Web browsing
+do:
+  - conditions:
+      '{{body.projectId}} != {{config.agentCredentials.projectId}} || !{{run.sourceWorkspaceId}} || {{run.sourceWorkspaceId}} != {{global.workspacesRegistry[''ai-knowledge''].id}}':
+        - set:
+            name: output
+            value:
+              error: Forbidden
+        - break: {}
+  - Serper.run:
+      type: '{{body.arguments.type}}'
+      q: '{{body.arguments.query}}'
+      ql: '{{body.arguments.country}}'
+      location: '{{body.arguments.location}}'
+      num: 20
+      output: search
+      hl: '{{body.arguments.lg}}'
+      tbs: '{{body.arguments.tbs}}'
+  - set:
+      name: currentDate
+      value: '{% date({{run.date}}).iso %}'
+  - set:
+      name: output
+      value:
+        value: '{{search}}'
+        description: List of search results
+validateArguments: true
+arguments:
+  body:
+    type: object
+    properties:
+      arguments:
+        type: object
+        properties:
+          type:
+            type: string
+            enum:
+              - search
+              - news
+              - images
+              - videos
+              - places
+              - reviews
+              - scholar
+              - patents
+              - shopping
+          query:
+            type: string
+            title: User query
+          country:
+            type: string
+            title: Country
+          lg:
+            type: string
+            title: lg
+          location:
+            type: string
+            title: location
+          tbs:
+            title: Date range
+            type: string
+            enum:
+              - ''
+              - qdr:h
+              - qdr:d
+              - qdr:w
+              - qdr:m
+              - qdr:y
+            enumNames:
+              - Any time
+              - Past hours
+              - Past 24 hours
+              - Past week
+              - Past month
+              - Past year
+description: Return list of web browsing results.
+output:
+  type: tool_result
+  output: '{{output}}'
+when:
+  endpoint: true
+labels:
+  - tools

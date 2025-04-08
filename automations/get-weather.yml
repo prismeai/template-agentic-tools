@@ -1,0 +1,81 @@
+slug: get-weather
+name: AIK/Tools/Get Weather
+do:
+  - conditions:
+      '{{body.projectId}} != {{config.agentCredentials.projectId}} || !{{run.sourceWorkspaceId}} || {{run.sourceWorkspaceId}} != {{global.workspacesRegistry[''ai-knowledge''].id}}':
+        - set:
+            name: output
+            value:
+              error: Forbidden
+        - break: {}
+  - Weatherapi.run:
+      type: '{{body.arguments.type}}'
+      q: '{{body.arguments.q}}'
+      aqi: '{{body.arguments.aqi}}'
+      alerts: '{{body.arguments.alerts}}'
+      days: '{{body.arguments.days}}'
+      output: weather
+  - set:
+      name: output
+      value:
+        value: '{{weather}}'
+        description: the weather
+validateArguments: true
+arguments:
+  body:
+    type: object
+    properties:
+      arguments:
+        type: object
+        properties:
+          type:
+            enum:
+              - current.json
+              - forecast.json
+              - alerts.json
+            type: string
+            enumNames:
+              - current
+              - forecast
+              - alerts
+            title: Type
+            description: current, forecast or alerts
+          q:
+            type: string
+            title: Query
+            placeholder: Paris
+            description: >-
+              Pass US Zipcode, UK Postcode, Canada Postalcode, IP address,
+              Latitude/Longitude (decimal degree) or city name.
+          aqi:
+            type: string
+            enum:
+              - 'yes'
+              - 'no'
+            enumNames:
+              - 'yes'
+              - 'no'
+            tile: Air quality
+            description: Get air quality data
+          alerts:
+            type: string
+            enum:
+              - 'yes'
+              - 'no'
+            enumNames:
+              - 'yes'
+              - 'no'
+            tile: Alerts
+            description: Get weather alert data
+          days:
+            type: number
+            tile: Days
+            description: Number of days of weather forecast. Value ranges from 1 to 10
+description: Return the weather.
+output:
+  type: tool_result
+  output: '{{output}}'
+when:
+  endpoint: true
+labels:
+  - tools

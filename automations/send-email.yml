@@ -1,0 +1,46 @@
+slug: send-email
+name: AIK/Tools/Send Email
+do:
+  - conditions:
+      '{{body.projectId}} != {{config.agentCredentials.projectId}} || !{{run.sourceWorkspaceId}} || {{run.sourceWorkspaceId}} != {{global.workspacesRegistry[''ai-knowledge''].id}}':
+        - set:
+            name: output
+            value:
+              error: Forbidden
+        - break: {}
+  - SendMail.sendMail:
+      to: '{{user.email}}'
+      replyTo: '{{user.email}}'
+      subject: '{{body.arguments.subject}}'
+      body: '{{body.arguments.body}}'
+      output: response
+  - set:
+      name: output
+      value:
+        value: '{{response}}'
+        description: the status of sending email
+validateArguments: true
+arguments:
+  body:
+    type: object
+    properties:
+      arguments:
+        type: object
+        properties:
+          subject:
+            type: string
+            title: Subject
+            description: Email subject
+          body:
+            type: string
+            title: Query
+            placeholder: Body
+            description: Body of the email
+description: Send email based on subject and body.
+output:
+  type: tool_result
+  output: '{{output}}'
+when:
+  endpoint: true
+labels:
+  - tools

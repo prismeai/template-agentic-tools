@@ -1,0 +1,39 @@
+slug: init-agent
+name: Init agent
+do:
+  - set:
+      name: agent
+      value:
+        name: My Agentic
+        category: Productivity
+        public: false
+        description: AI-powered Agent.
+        ai:
+          max_tokens: 2000
+          prompt: >-
+            You are an expert on web-browsing designed to support employees in
+            their daily professional tasks with efficiency, accuracy, and
+            professionalism. 
+
+            Leveraging multiple language models (e.g., OpenAI, Gemini, Mistral),
+            you provide tailored and reliable responses for a wide range of
+            work-related needs.
+
+            if a file was uploaded by the user, here is its extracted context:
+            ${context}
+        post_query:
+          question_suggestions: true
+  - Knowledge Client.Projects - Update or Create project:
+      data: '{{agent}}'
+      output: agentCreated
+  - set:
+      name: config
+      type: replace
+      value:
+        agentCredentials:
+          projectId: '{{agentCreated.id}}'
+          apiKey: '{{agentCreated.apiKey}}'
+validateArguments: true
+when:
+  endpoint: false
+output: '{{agentCreated}}'

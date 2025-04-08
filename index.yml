@@ -1,0 +1,15 @@
+id: ES2IF1n
+name: Multi-Agent Web Browsing Template
+slug: agent-web-browsing
+description: Starter for agentic
+photo: >-
+  https://staging-uploads.prisme.ai/tzYVr6E/c2hT2AkVGUdvJMGuq3jiU.icon-prisme.png
+labels:
+  - suggestions
+customDomains: []
+repositories: {}
+config:
+  value:
+    agentCredentials:
+      projectId: 67bb210bf50b151dd2fa8ab4
+      apiKey: 4954bb681014422c861fc77b192e5988

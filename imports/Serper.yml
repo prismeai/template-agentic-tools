@@ -1,0 +1,4 @@
+appSlug: Serper
+slug: Serper
+config:
+  USER_API_KEY: MY KEY

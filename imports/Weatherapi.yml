@@ -1,0 +1,4 @@
+appSlug: Weatherapi
+slug: Weatherapi
+config:
+  API_KEY: e945341e35374dcb8b5160432251502
