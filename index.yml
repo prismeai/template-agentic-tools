@@ -11,5 +11,5 @@ repositories: {}
 config:
   value:
     agentCredentials:
-      projectId: 67bb210bf50b151dd2fa8ab4
-      apiKey: 4954bb681014422c861fc77b192e5988
+      projectId: ""
+      apiKey: ""
